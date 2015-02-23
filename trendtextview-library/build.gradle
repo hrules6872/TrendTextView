@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+
+android {
+  compileSdkVersion 21
+  buildToolsVersion "21.1.2"
+
+  defaultConfig {
+    minSdkVersion 15
+    targetSdkVersion 21
+    versionCode 1
+    versionName "1.0"
+  } 
+}
+
+android.libraryVariants.all { variant ->
+  task("jar${variant.name}", type: Jar) {
+    description "Bundles compiled .class files into a JAR file for $variant.name."
+    dependsOn variant.javaCompile
+    from variant.javaCompile.destinationDir
+    exclude '**/R.class', '**/R$*.class', '**/R.html', '**/R.*.html'
+  }
+
+  String taskName = "makeJar${variant.name.capitalize()}"
+
+  task(taskName, type: Copy) {
+    String archiveName = "${project.name}-${variant.name}"
+    String outputDir = "${buildDir.getPath()}/outputs"
+
+    dependsOn "assemble${variant.name.capitalize()}"
+    from(zipTree("${outputDir}/aar/${archiveName}.aar"))
+    into("${outputDir}/jar/")
+    include('classes.jar')
+    rename('classes.jar', "${archiveName}-${variant.mergedFlavor.versionName}.jar")
+  }
+
+  makeJar.dependsOn tasks[taskName]
+}
+
+task(makeJar) << {
+  // Empty. We'll add dependencies for this task below
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+}

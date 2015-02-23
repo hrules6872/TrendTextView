@@ -1,0 +1,1 @@
+include ':app', ':trendtextview-library', ':trendtextview-demo'
