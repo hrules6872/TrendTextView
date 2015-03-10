@@ -1,8 +1,20 @@
 TrendTextView
 =====
-TrendTextView is an extended TextView component for Android that imitates the style used in [Google Trends visualization](http://www.google.com/trends/hottrends/visualize).
+TrendTextView is an extended TextView component for Android inspired by [Google Trends visualization](http://www.google.com/trends/hottrends/visualize).
 
 ![image](demo.gif)
+
+##Importing to your project
+Add this dependency to your build.gradle file:
+```java
+dependencies {
+    compile 'com.hrules:trendtextview:1.0.0'
+}
+```
+
+Developed by
+-------
+hrules6872 [![Twitter](http://img.shields.io/badge/contact-@h_rules-blue.svg?style=flat)](http://twitter.com/h_rules)
 
 License
 -------

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
 
 android {
   compileSdkVersion 21
@@ -7,39 +8,18 @@ android {
   defaultConfig {
     minSdkVersion 15
     targetSdkVersion 21
-    versionCode 1
-    versionName "1.0"
-  } 
-}
-
-android.libraryVariants.all { variant ->
-  task("jar${variant.name}", type: Jar) {
-    description "Bundles compiled .class files into a JAR file for $variant.name."
-    dependsOn variant.javaCompile
-    from variant.javaCompile.destinationDir
-    exclude '**/R.class', '**/R$*.class', '**/R.html', '**/R.*.html'
+    versionCode 100
+    versionName "1.0.0"
   }
-
-  String taskName = "makeJar${variant.name.capitalize()}"
-
-  task(taskName, type: Copy) {
-    String archiveName = "${project.name}-${variant.name}"
-    String outputDir = "${buildDir.getPath()}/outputs"
-
-    dependsOn "assemble${variant.name.capitalize()}"
-    from(zipTree("${outputDir}/aar/${archiveName}.aar"))
-    into("${outputDir}/jar/")
-    include('classes.jar')
-    rename('classes.jar', "${archiveName}-${variant.mergedFlavor.versionName}.jar")
-  }
-
-  makeJar.dependsOn tasks[taskName]
 }
 
-task(makeJar) << {
-  // Empty. We'll add dependencies for this task below
-}
-
-dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
+publish {
+  userOrg = 'hrules6872'
+  groupId = 'com.hrules'
+  artifactId = 'trendtextview'
+  version = '1.0.0'
+  description =
+      'TrendTextView is an extended TextView component for Android inspired by Google Trends visualization'
+  website = 'https://github.com/hrules6872/TrendTextView'
+  repository = "https://github.com/hrules6872/TrendTextView.git"
 }
