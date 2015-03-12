@@ -1,1 +1,1 @@
-include ':app', ':trendtextview-library', ':trendtextview-demo'
+include ':trendtextview-library', ':trendtextview-demo'
