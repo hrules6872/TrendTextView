@@ -4,6 +4,12 @@ TrendTextView is an extended TextView component for Android inspired by [Google 
 
 ![image](demo.gif)
 
+##Usage
+```java
+TrendTextView trendTextView = (TrendTextView) findViewById(R.id.trendTextView);
+trendTextView.animateText("Hello world!");
+```
+
 ##Importing to your project
 Add this dependency to your build.gradle file:
 ```java
