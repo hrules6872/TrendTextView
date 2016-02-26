@@ -7,23 +7,23 @@ import android.os.Build;
 import android.text.style.ImageSpan;
 
 class ImageCenteredSpan extends ImageSpan {
-  public ImageCenteredSpan(Drawable d) {
-    super(d);
+  public ImageCenteredSpan(Drawable drawable) {
+    super(drawable);
   }
 
   @Override
   public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y,
       int bottom, Paint paint) {
-    Drawable b = getDrawable();
+    Drawable drawable = getDrawable();
     canvas.save();
 
-    int transY = (int) ((bottom - TrendTextView.lineSpacingExtra) - (b.getBounds().bottom
+    int transY = (int) ((bottom - TrendTextView.lineSpacingExtra) - (drawable.getBounds().bottom
         * TrendTextView.lineSpacingMultiplier));
     transY -=
         isLollipop() ? paint.getFontMetricsInt().descent : paint.getFontMetricsInt().descent / 2;
 
     canvas.translate(x, transY);
-    b.draw(canvas);
+    drawable.draw(canvas);
     canvas.restore();
   }
 

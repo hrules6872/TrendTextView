@@ -12,14 +12,12 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 
 public class TrendTextView extends TrendFontTextView {
-  private static String TAG = "TrendTextView";
-
-  private static final int DELAY_DEFAULT = 125;
-  private static final int DELAY_BETWEEN_WORDS_DEFAULT = 250;
-  private static final int DELAY_CURSOR_DEFAULT = 500;
-  private static final float LETTER_SPACING_DEFAULT = -3f;
-  private static final float LINE_SPACING_MULTIPLIER = 0.85f;
-  private static final float LINE_SPACING_EXTRA = 0.0f;
+  private static final int DEFAULT_DELAY_MILLIS = 125;
+  private static final int DEFAULT_DELAY_BETWEEN_WORDS_MILLIS = 250;
+  private static final int DEFAULT_DELAY_CURSOR_MILLIS = 500;
+  private static final float DEFAULT_LETTER_SPACING = -3f;
+  private static final float DEFAULT_LINE_SPACING_MULTIPLIER = 0.85f;
+  private static final float DEFAULT_LINE_SPACING_EXTRA = 0.0f;
 
   private ShapeDrawable cursorDrawable;
   private CharSequence textToAnimate;
@@ -27,8 +25,6 @@ public class TrendTextView extends TrendFontTextView {
   private long delay;
   private long delayBetweenWords;
   private long cursorBlinkRate;
-  private final Handler handlerText = new Handler();
-  private final Handler handlerCursor = new Handler();
   private boolean cursorBlink;
   private boolean running;
   private TrendTextViewListener listener;
@@ -36,6 +32,9 @@ public class TrendTextView extends TrendFontTextView {
   protected static float lineSpacingMultiplier;
   protected static float lineSpacingExtra;
   private CharSequence originalText;
+
+  private final Handler handlerText = new Handler();
+  private final Handler handlerCursor = new Handler();
 
   public TrendTextView(Context context) {
     this(context, null, 0);
@@ -53,13 +52,13 @@ public class TrendTextView extends TrendFontTextView {
   private void init(Context context) {
     cursorDrawable = new ShapeDrawable(new RectShape());
 
-    delay = DELAY_DEFAULT;
-    delayBetweenWords = DELAY_BETWEEN_WORDS_DEFAULT;
-    cursorBlinkRate = DELAY_CURSOR_DEFAULT;
+    delay = DEFAULT_DELAY_MILLIS;
+    delayBetweenWords = DEFAULT_DELAY_BETWEEN_WORDS_MILLIS;
+    cursorBlinkRate = DEFAULT_DELAY_CURSOR_MILLIS;
 
-    letterSpacing = LETTER_SPACING_DEFAULT;
-    lineSpacingExtra = LINE_SPACING_EXTRA;
-    lineSpacingMultiplier = LINE_SPACING_MULTIPLIER;
+    letterSpacing = DEFAULT_LETTER_SPACING;
+    lineSpacingExtra = DEFAULT_LINE_SPACING_EXTRA;
+    lineSpacingMultiplier = DEFAULT_LINE_SPACING_MULTIPLIER;
 
     originalText = "";
     textToAnimate = "";
@@ -89,10 +88,7 @@ public class TrendTextView extends TrendFontTextView {
   }
 
   public void animateText(CharSequence text) {
-    if (text == null) {
-      return;
-    }
-    if (text.toString().trim().equals("")) {
+    if (text == null || text.toString().trim().equals("")) {
       return;
     }
 
@@ -122,36 +118,6 @@ public class TrendTextView extends TrendFontTextView {
   public long getDelay() {
     return delay;
   }
-
-  private final Runnable characterAdder = new Runnable() {
-    @Override public void run() {
-      setText(textToAnimate.subSequence(0, position++).toString() + " ");
-
-      if (done()) {
-        long extraDelay = 0;
-        if (Character.isWhitespace(textToAnimate.charAt(index()))) {
-          extraDelay = delayBetweenWords;
-        }
-
-        handlerText.postDelayed(characterAdder, delay + extraDelay);
-      } else {
-        running = false;
-        if (listener != null) {
-          listener.onFinished();
-        }
-
-        handlerCursor.post(cursorBlinker);
-      }
-    }
-
-    private int index() {
-      return position > 1 ? position - 2 : position - 1;
-    }
-
-    private boolean done() {
-      return position < textToAnimate.length();
-    }
-  };
 
   public void setDelay(long millis) {
     delay = millis;
@@ -213,14 +179,43 @@ public class TrendTextView extends TrendFontTextView {
       handlerCursor.postDelayed(cursorBlinker, cursorBlinkRate);
     }
   };
+  private final Runnable characterAdder = new Runnable() {
+    @Override public void run() {
+      setText(textToAnimate.subSequence(0, position++).toString() + " ");
+
+      if (done()) {
+        long extraDelay = 0;
+        if (Character.isWhitespace(textToAnimate.charAt(index()))) {
+          extraDelay = delayBetweenWords;
+        }
+
+        handlerText.postDelayed(characterAdder, delay + extraDelay);
+      } else {
+        running = false;
+        if (listener != null) {
+          listener.onFinished();
+        }
+
+        handlerCursor.post(cursorBlinker);
+      }
+    }
+
+    private int index() {
+      return position > 1 ? position - 2 : position - 1;
+    }
+
+    private boolean done() {
+      return position < textToAnimate.length();
+    }
+  };
+
+  @Override public float getLetterSpacing() {
+    return letterSpacing;
+  }
 
   @Override public void setLetterSpacing(float letterSpacing) {
     this.letterSpacing = letterSpacing;
     applyLetterSpacing();
-  }
-
-  @Override public float getLetterSpacing() {
-    return letterSpacing;
   }
 
   @Override public CharSequence getText() {

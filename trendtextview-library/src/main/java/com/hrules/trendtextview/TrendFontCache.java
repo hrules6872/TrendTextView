@@ -6,20 +6,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 class TrendFontCache {
-  private static Map<String, Typeface> fontMap = new HashMap<>();
+  private static Map<String, Typeface> mapFont = new HashMap<>();
 
   public static Typeface getFont(Context context, String fontName) {
-    if (fontMap.containsKey(fontName)) {
-      return fontMap.get(fontName);
-    } else {
-      Typeface typeface;
+    Typeface typeface = mapFont.get(fontName);
+
+    if (typeface == null) {
       try {
         typeface = Typeface.createFromAsset(context.getAssets(), fontName);
       } catch (Exception e) {
         typeface = Typeface.DEFAULT;
       }
-      fontMap.put(fontName, typeface);
-      return typeface;
+      mapFont.put(fontName, typeface);
     }
+    return typeface;
   }
 }

@@ -21,7 +21,7 @@ publish {
   userOrg = 'hrules6872'
   groupId = 'com.hrules'
   artifactId = 'trendtextview'
-  version = '1.0.0'
+  version = libraryVersionName
   description = 'TrendTextView'
   website = 'https://github.com/hrules6872/TrendTextView'
   repository = "https://github.com/hrules6872/TrendTextView.git"

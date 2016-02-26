@@ -1,18 +1,24 @@
 package com.hrules.trendtextview;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
 public class TrendFontTextView extends TextView {
-  private static String TAG = "TrendFontTextView";
+  private static final String DEFAULT_FONT_TREND_BOLD = "fonts/RobotoCondensed-Bold.ttf";
+  private static final String DEFAULT_TEXT_SHADOW_COLOR = "#33000000";
+  private static final boolean DEFAULT_SHADOW_STATE = true;
+  public static final float DEFAULT_SHADOWLAYER_RADIUS = 0.5f;
+  public static final int DEFAULT_SHADOWLAYER_DX = 0;
+  public static final float DEFAULT_SHADOWLAYER_DY = 2f;
 
-  private static final String FONT_TREND_BOLD = "fonts/RobotoCondensed-Bold.ttf";
-  private static final String TEXT_SHADOW_COLOR = "#33000000";
   private String font;
   private int color;
+
   private boolean hasShadow;
 
   public TrendFontTextView(Context context) {
@@ -28,10 +34,16 @@ public class TrendFontTextView extends TextView {
     init();
   }
 
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  public TrendFontTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    super(context, attrs, defStyleAttr, defStyleRes);
+    init();
+  }
+
   private void init() {
-    font = FONT_TREND_BOLD;
-    color = Color.parseColor(TEXT_SHADOW_COLOR);
-    hasShadow = true;
+    font = DEFAULT_FONT_TREND_BOLD;
+    color = Color.parseColor(DEFAULT_TEXT_SHADOW_COLOR);
+    hasShadow = DEFAULT_SHADOW_STATE;
 
     setPaintFlags(getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
 
@@ -51,7 +63,8 @@ public class TrendFontTextView extends TextView {
   public void setShadowColor(int color) {
     this.color = color;
     hasShadow = true;
-    setShadowLayer(0.5f, 0, 2f, color);
+    setShadowLayer(DEFAULT_SHADOWLAYER_RADIUS, DEFAULT_SHADOWLAYER_DX, DEFAULT_SHADOWLAYER_DY,
+        color);
   }
 
   public void showShadow(boolean showShadow) {
