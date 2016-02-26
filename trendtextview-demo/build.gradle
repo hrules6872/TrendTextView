@@ -1,20 +1,19 @@
 apply plugin: 'com.android.application'
 
 android {
-  compileSdkVersion 21
-  buildToolsVersion "21.1.2"
+  compileSdkVersion 23
+  buildToolsVersion "23.0.2"
 
   defaultConfig {
     applicationId "com.hrules.trendtextview.demo"
     minSdkVersion 15
-    targetSdkVersion 21
+    targetSdkVersion 23
     versionCode 1
     versionName "1.0"
   } 
 }
 
 dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
   compile project(":trendtextview-library")
-  compile 'com.android.support:appcompat-v7:21.0.3'
+  compile 'com.android.support:appcompat-v7:23.1.0'
 }
