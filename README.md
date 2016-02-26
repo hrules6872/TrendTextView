@@ -14,7 +14,7 @@ trendTextView.animateText("Hello world!");
 Add this dependency to your build.gradle file:
 ```java
 dependencies {
-    compile 'com.hrules:trendtextview:1.0.0'
+    compile 'com.hrules:trendtextview:1.0.1'
 }
 ```
 
